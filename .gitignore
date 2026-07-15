@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+
+# Downloaded / derived data — regenerate with:
+#   python -m adgate.data.download && python -m adgate.calibrate
+data/
+
+# Per-deployment config (copy config.example.yaml instead)
+config.yaml
+docker-compose.override.yml
+
+# Generated reports
+reports/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+
+.claude/

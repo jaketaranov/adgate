@@ -1,0 +1,21 @@
+services:
+  adgate:
+    build: .
+    ports:
+      - "8399:8399"
+    volumes:
+      # Persists downloaded ads/queries + fitted calibration.json across
+      # restarts, so the multi-minute download+calibrate bootstrap only
+      # runs once. Delete this directory to force a full re-run.
+      - ./data:/app/data
+      # Uncomment once you've copied config.example.yaml -> config.yaml
+      # locally, to override models/thresholds without rebuilding the image:
+      # - ./config.yaml:/app/config.yaml:ro
+
+      # To reach Ollama running on the host instead of an API-based model,
+      # uncomment this plus the extra_hosts block below, and point
+      # config.yaml's model fields at "ollama_chat/<model>":
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+    # environment:
+    #   - OLLAMA_API_BASE=http://host.docker.internal:11434

@@ -1,0 +1,36 @@
+# AdGate configuration — copy to config.yaml and uncomment what you change.
+#
+# Every key is optional: this file holds only overrides, and anything omitted
+# falls back to the defaults in src/adgate/config.py (the single source of
+# truth for all knobs, types, and documentation).
+
+# Common knobs
+# Precision <-> coverage tradeoff: conservative | balanced | aggressive
+#operating_point: balanced
+
+# Gate A backend: heuristic (offline pattern rules) | llm (few-shot via litellm)
+#intent_backend: heuristic
+
+# Stage C LLM judge on borderline scores (needs an LLM key or local Ollama)
+#use_judge: false
+
+# Stage 0: last_turns (concat last 2 turns) | llm (standalone-query rewrite)
+#query_rewrite: last_turns
+
+# LLM models (any litellm model id)
+#intent_model: claude-haiku-4-5-20251001
+#judge_model: gpt-4o-mini
+#rewrite_model: claude-haiku-4-5-20251001
+
+# Local testing via Ollama (no API key): `ollama serve` + `ollama pull <model>`,
+# then point the models at "ollama_chat/<model>" and enable the llm backends:
+#intent_backend: llm
+#use_judge: true
+#intent_model: ollama_chat/llama3.1
+#judge_model: ollama_chat/llama3.1
+#rewrite_model: ollama_chat/llama3.1
+
+# Retrieval / rerank
+# bm25 (offline, no models) | dense (embeddings) | hybrid (RRF fusion)
+#retrieval_backend: hybrid
+#rerank_backend: cross-encoder   # or: none

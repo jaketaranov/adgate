@@ -1,0 +1,11 @@
+venv/
+.venv/
+data/
+.pytest_cache/
+**/__pycache__/
+*.pyc
+.git/
+tests/
+run_tests.sh
+config.yaml
+*.md
