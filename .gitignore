@@ -15,7 +15,7 @@ venv/
 
 # Downloaded / derived data — regenerate with:
 #   python -m adgate.data.download && python -m adgate.calibrate
-data/
+/data/
 
 # Per-deployment config (copy config.example.yaml instead)
 config.yaml

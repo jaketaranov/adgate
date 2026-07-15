@@ -1,7 +1,6 @@
 """Skeleton coherence test: every module imports without model downloads,
 schemas instantiate, and the pipeline wires stage interfaces."""
 
-import pytest
 
 
 def test_all_modules_import():

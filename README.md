@@ -2,11 +2,11 @@
 
 A project exploring ad relevance gating for LLM applications: decide whether to show an ad in a conversation, and show nothing unless the query has commercial intent (Gate A) and the inventory actually contains a relevant ad (Gate B).
 
-Two failure modes motivate the two gates: `"explain what a derivative is"` has no commercial intent, so no ad should show — and `"good indian restaurant near me"` is commercial, but if there are no restaurant ads in the inventory, the closest available match is still wrong. The pipeline is built to abstain at every stage rather than force a match.
+Two failure modes motivate the two gates: `"explain what a derivative is"` has no commercial intent, so no ad should show, and `"good indian restaurant near me"` is commercial, but if there are no restaurant ads in the inventory, the closest available match is still wrong. The pipeline is built to abstain at every stage rather than force a match.
 
 ## Architecture
 
-A 4-stage cascade where every stage can abstain with a machine-readable reason — cheap stages first, the expensive LLM judgment confined to a bounded borderline band:
+A 4-stage cascade where every stage can abstain with a machine-readable reason, cheap stages first, the expensive LLM judgment confined to a bounded borderline band:
 
 ```
 conversation messages (last N turns)
@@ -28,7 +28,7 @@ conversation messages (last N turns)
    ▼                                                      ▼
 [Stage C] LLM-as-judge (borderline band only)
              "no" ─────────────────────► ABSTAIN (judge_rejected)
-             "yes" ────────────────────► SHOW top ad (JSON) — else HTTP 204
+             "yes" ────────────────────► SHOW top ad (JSON), else HTTP 204
 ```
 
 Everything runs on off-the-shelf models (no custom training): `sentence-transformers` embeddings + cross-encoder for retrieval/rerank, and any [litellm](https://github.com/BerriAI/litellm)-supported model (Anthropic, OpenAI, local Ollama, …) for the intent classifier, judge, and query rewriter.
@@ -45,7 +45,7 @@ Real pipeline runs against the bundled ESCI product inventory (`aggressive` oper
 | *"good indian restaurant near me"* | RESEARCH | 20 candidates | 0.25 | — | 204 (`below_relevance`) |
 | *"can you recommend a whey protein powder?"* → … → *"nevermind, I just ordered one. thanks!"* | ADJACENT | — | — | — | 204 (`no_intent`) |
 
-Each row exercises a different path: a straightforward product-research hit; a multi-turn conversation where the intent only exists in context (Stage 0 condenses the recent turns into one query); a non-commercial query stopped at the intent gate; the pitch's own failure case — a perfectly commercial query correctly abstained because the inventory contains no restaurants; and a completed purchase, where showing an ad would arrive too late.
+Each row exercises a different path: a straightforward product-research hit; a multi-turn conversation where the intent only exists in context (Stage 0 condenses the recent turns into one query); a non-commercial query stopped at the intent gate; the pitch's own failure case - a perfectly commercial query correctly abstained because the inventory contains no restaurants; and a completed purchase, where showing an ad would arrive too late.
 
 ## Quickstart
 
@@ -92,7 +92,7 @@ SHOW: [Broan-NuTone] Broan Very Quiet Ceiling Bathroom Exhaust Fan ...
 
 ### Local models via Ollama (no API key)
 
-Point the litellm model fields in `config.yaml` at `ollama_chat/<model>` (e.g. `ollama_chat/llama3.1`) with `ollama serve` running — see the comments in [config.example.yaml](config.example.yaml). Note that models below ~3B parameters grade commercial intent unreliably; the `heuristic` intent backend is often a stronger choice than a very small LLM.
+Point the litellm model fields in `config.yaml` at `ollama_chat/<model>` (e.g. `ollama_chat/llama3.1`) with `ollama serve` running, see the comments in [config.example.yaml](config.example.yaml). Note that models below ~3B parameters grade commercial intent unreliably; the `heuristic` intent backend is often a stronger choice than a very small LLM.
 
 ## Configuration
 
@@ -110,7 +110,7 @@ All knobs live in `config.yaml` (copy from [config.example.yaml](config.example.
 
 The fully-offline configuration (`intent_backend: heuristic`, `retrieval_backend: bm25`, `rerank_backend: none`, `use_judge: false`) runs with no model downloads and no API keys — it's what the unit tests use.
 
-**Calibration is a procedure, not a constant.** `python -m adgate.calibrate` fits an isotonic mapping from raw reranker scores to P(relevant) and selects each operating point's τ_B as the smallest threshold whose Wilson 95% lower confidence bound clears that point's precision target. Rerun it whenever the reranker, retrieval backend, or ad inventory changes.
+`python -m adgate.calibrate` fits an isotonic mapping from raw reranker scores to P(relevant) and selects each operating point's τ_B as the smallest threshold whose Wilson 95% lower confidence bound clears that point's precision target. Rerun it whenever the reranker, retrieval backend, or ad inventory changes.
 
 ## Data
 

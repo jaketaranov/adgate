@@ -28,3 +28,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/adgate"]
+
+[tool.ruff]
+lint.ignore = ["E741"]
