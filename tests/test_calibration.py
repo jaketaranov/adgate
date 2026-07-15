@@ -1,6 +1,5 @@
 """Hand-computed cases for the calibration statistics and RRF fusion."""
 
-import math
 
 from adgate.calibration import (
     CalibrationModel,
