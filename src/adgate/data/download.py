@@ -134,8 +134,9 @@ def download_esci(
                 n_ads += 1
             q = by_query[str(row["query_id"])]
             q["query"] = row["query"]
+            if pid not in ["ads"]:
+                n_judgments+=1
             q["ads"][pid] = esci_grade(row["esci_label"])
-            n_judgments += 1
     return n_ads, n_judgments, by_query
 
 
